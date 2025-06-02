@@ -52,40 +52,39 @@ function Page() {
   return (
     <>
       <FloatingNavbar showLoginState={{ setShowLoginPopup }} />
-
-      <FullPageWrapper>
-        <div className="min-h-screen flex flex-col">
-          <div className="flex-1">
-            <div className="section">
-              <NebulaHero />
-            </div>
-            <div className="section">
-              <About />
-            </div>
-            <div className="section">
-              <GitHubShowcase />
-            </div>
-            <div className="section">
-              <AutoScrollingTestimonials />
-            </div>
-            <div className="section">
-              <VisualDiary />
-            </div>
-            <div className="section">
-              <EventsSection />
-            </div>
-            <div className="section">
-              <TeamPage />
-              <Footer />
-            </div>
-          </div>
+      <>
+        <div className="section">
+          <NebulaHero />
         </div>
-      </FullPageWrapper>
+        <div className="section">
+          <About />
+        </div>
+        <div className="section">
+          <GitHubShowcase />
+        </div>
+        <div className="section">
+          <AutoScrollingTestimonials />
+        </div>
+        <div className="section">
+          <VisualDiary />
+        </div>
+        <div className="section">
+          <EventsSection />
+        </div>
+        <div className="section">
+          <TeamPage />
+        </div>
+
+        <div className="section">
+          <TeamPage />
+          <Footer />
+        </div>
+      </>
 
       {showLoginPopup && (
         <LoginFormPopup
           onClose={() => setShowLoginPopup(false)}
-          onLoginSuccess={(token, email) => {
+          onLoginSuccess={(token: any, email: string) => {
             setIsLoggedIn(true);
             localStorage.setItem("token", token);
             localStorage.setItem("email", email);

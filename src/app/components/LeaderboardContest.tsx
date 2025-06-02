@@ -11,13 +11,6 @@ interface Contributor {
   html_url: string;
 }
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * A page that displays the leaderboard of contributors to the SAST GitHub repo.
- * It fetches the list of contributors from the GitHub API and displays them
- * in a table, with the top 3 contributors highlighted.
- */
-/*******  00541f80-7d0a-407d-aa04-9cfdd914b5b2  *******/
 function LeaderboardContest() {
   const [mounted, setMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

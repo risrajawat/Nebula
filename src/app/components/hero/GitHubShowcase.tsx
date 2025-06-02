@@ -10,7 +10,7 @@ const GitHubShowcase = () => {
       name: "SAST",
       moto: "Exploring the cosmos through code and collaboration.",
       description:
-        "Welcome to the official repository of the SAST website — a collaborative space to build a vibrant platform showcasing our club's spirit, achievements, and events.",
+        "Welcome to the official repository of the SAST website — a collaborative space to build a vibrant platform showcasing our club&apos;s spirit, achievements, and events.",
       logo: "https://i.postimg.cc/g2G97j2c/society-for-aerospace-and-space-technology-logo.jpg",
       link: "https://github.com/SASTxNST/Website_SAST",
     },
@@ -39,11 +39,15 @@ const GitHubShowcase = () => {
 
               <div>
                 <div className="flex items-center gap-4 mb-5 relative z-10">
-                  <Image
-                    src={repo.logo}
-                    alt={repo.name}
-                    className="w-14 h-14 object-contain rounded-lg bg-white/10 p-1"
-                  />
+                  <div className="w-14 h-14 relative">
+                    <Image
+                      src={repo.logo}
+                      alt={repo.name}
+                      width={56}
+                      height={56}
+                      className="object-contain rounded-lg bg-white/10 p-1"
+                    />
+                  </div>
                   <div>
                     <h2 className="text-2xl font-semibold">{repo.name}</h2>
                     <p className="text-sm text-white/60">{repo.moto}</p>

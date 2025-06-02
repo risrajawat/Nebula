@@ -67,6 +67,8 @@ const VisualDiary: React.FC = () => {
               <Image
                 src={item.src}
                 alt={item.alt}
+                width={300}
+                height={256}
                 className="w-full h-64 object-cover"
               />
             </div>

@@ -16,6 +16,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "media.licdn.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "avatars.githubusercontent.com",
         port: "",
         pathname: "/**",
@@ -26,7 +32,18 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
-      // Add more domains as needed
+      {
+        protocol: "https",
+        hostname: "d3dyfaf3iutrxo.cloudfront.net",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "scontent-sof1-2.cdninstagram.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

@@ -73,10 +73,6 @@ function Page() {
         </div>
         <div className="section">
           <TeamPage />
-        </div>
-
-        <div className="section">
-          <TeamPage />
           <Footer />
         </div>
       </>

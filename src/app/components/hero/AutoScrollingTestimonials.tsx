@@ -136,16 +136,18 @@ const ScrollingRow: React.FC<{
 
 const AutoScrollingTestimonials: React.FC = () => {
   return (
-    <div className="w-full bg-black py-16 overflow-hidden">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-semibold text-white">
+    <div className="w-full h-screen bg-black flex flex-col overflow-hidden pt-[72px]">
+      <div className="text-center mb-6 md:mb-8 shrink-0">
+        <h2 className="text-2xl md:text-4xl font-semibold text-white">
           What the team has to say
         </h2>
-        <p className="text-slate-400 mt-2 text-sm md:text-base">
+        <p className="text-slate-400 mt-1 md:mt-2 text-sm md:text-base">
           Hear from our team members who built it first-hand
         </p>
       </div>
-      <div className="relative">
+
+      <div className="relative flex-1 flex flex-col justify-center">
+        {/* Left and right fade gradients for desktop */}
         <div className="hidden md:block absolute left-0 top-0 w-96 h-full bg-gradient-to-r from-black via-black/90 via-black/70 via-black/40 to-transparent z-10 pointer-events-none"></div>
         <div className="hidden md:block absolute right-0 top-0 w-96 h-full bg-gradient-to-l from-black via-black/90 via-black/70 via-black/40 to-transparent z-10 pointer-events-none"></div>
 

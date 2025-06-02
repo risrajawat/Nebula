@@ -5,8 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import TopStatsBlock from "../components/TopLang";
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   Tooltip,
@@ -18,7 +16,9 @@ import {
   Line,
 } from "recharts";
 
-const ContributionGraph = dynamic(() => import("react-github-calendar"), { ssr: false });
+const ContributionGraph = dynamic(() => import("react-github-calendar"), {
+  ssr: false,
+});
 
 interface Repo {
   owner: string;
@@ -74,7 +74,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
   const [topLanguages, setTopLanguages] = useState<string[]>(["English"]);
   const [estimatedTime, setEstimatedTime] = useState<string>("");
 
-  const [lineChartType, setLineChartType] = useState<"commits" | "issues" | "prs">("commits");
+  const [lineChartType, setLineChartType] = useState<
+    "commits" | "issues" | "prs"
+  >("commits");
   const [lineChartData, setLineChartData] = useState({
     commits: [] as { date: string; count: number }[],
     issues: [] as { date: string; count: number }[],
@@ -141,7 +143,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         const [eventsRes, repoRes, contributorsRes] = await Promise.all([
           fetch(`https://api.github.com/repos/SASTxNST/Website_SAST/events`),
           fetch("https://api.github.com/repos/SASTxNST/Website_SAST"),
-          fetch("https://api.github.com/repos/SASTxNST/Website_SAST/contributors"),
+          fetch(
+            "https://api.github.com/repos/SASTxNST/Website_SAST/contributors"
+          ),
         ]);
 
         const events = await eventsRes.json();
@@ -172,20 +176,31 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
                 });
                 commitMap[dateStr] = (commitMap[dateStr] || 0) + 1;
               });
-            } else if (event.type === "PullRequestEvent" && event.payload.pull_request?.merged) {
+            } else if (
+              event.type === "PullRequestEvent" &&
+              event.payload.pull_request?.merged
+            ) {
               merges.push({
                 repoName: event.repo.name,
                 title: event.payload.pull_request.title,
-                date: new Date(event.payload.pull_request.merged_at).toLocaleString(),
+                date: new Date(
+                  event.payload.pull_request.merged_at
+                ).toLocaleString(),
                 url: event.payload.pull_request.html_url,
               });
             }
 
-            if (event.type === "IssuesEvent" && event.payload.action === "opened") {
+            if (
+              event.type === "IssuesEvent" &&
+              event.payload.action === "opened"
+            ) {
               issueMap[dateStr] = (issueMap[dateStr] || 0) + 1;
             }
 
-            if (event.type === "PullRequestEvent" && event.payload.action === "opened") {
+            if (
+              event.type === "PullRequestEvent" &&
+              event.payload.action === "opened"
+            ) {
               prMap[dateStr] = (prMap[dateStr] || 0) + 1;
             }
           });
@@ -200,7 +215,8 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         const next = new Date(now + 5 * 60 * 1000);
         setNextFetchTime(next.toLocaleTimeString());
 
-        const rank = contributors.findIndex((c: any) => c.login === formData.githubId) + 1;
+        const rank =
+          contributors.findIndex((c: any) => c.login === formData.githubId) + 1;
         setContributorRank(rank > 0 ? rank : null);
 
         const formatMap = (map: Record<string, number>) =>
@@ -213,7 +229,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         });
       } catch (err) {
         console.error("Unexpected GitHub fetch error:", err);
-        toast.error("GitHub API failed. Possibly rate-limited or user not found.");
+        toast.error(
+          "GitHub API failed. Possibly rate-limited or user not found."
+        );
       }
     };
 
@@ -225,18 +243,11 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
   const stars = repoMeta[0]?.stargazers_count || 0;
   const forks = repoMeta[0]?.forks_count || 0;
 
-  const barData = commitDetails.reduce((acc: any, commit) => {
-    const date = commit.date.split(",")[0];
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {});
-  const formattedChartData = Object.entries(barData).map(([date, count]) => ({ date, count }));
-
   const pieData = [
     { name: "Commits", value: commitDetails.length },
     { name: "PR Merges", value: mergeDetails.length },
   ];
-  const pieColors = ["#56d364", "#1f6feb"]; // GitHub green and blue
+  const pieColors = ["#56d364", "#1f6feb"]; 
 
   return (
     <div className="min-h-screen bg-[#0d1117] p-6 text-[#c9d1d9] font-sans">
@@ -250,11 +261,10 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         }}
       />
 
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-[#30363d] pb-6">
         <div>
           <h1 className="text-2xl font-semibold text-[#e6edf3]">Welcome, {formData.username || 'Developer'}</h1>
-          {/* <p className="text-sm text-[#7d8590]">Next data refresh: {nextFetchTime || 'soon'}</p> */}
+          {nextFetchTime && <p className="text-sm text-[#7d8590]">Next data refresh: {nextFetchTime}</p>}
         </div>
         
         <div className="flex items-center gap-3">
@@ -282,9 +292,7 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         nextFetchTime={nextFetchTime} 
       />
 
-      {/* Profile Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Profile Form */}
         <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d]">
           <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Profile Settings</h2>
           <div className="space-y-4">
@@ -315,7 +323,6 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
           </div>
         </div>
 
-        {/* Profile Card */}
         <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d] flex flex-col">
           <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Profile Preview</h2>
           <div className="flex flex-col items-center justify-center flex-grow">
@@ -342,9 +349,7 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         </div>
       </div>
 
-      {/* Data Visualization Section */}
       <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {/* Contribution Heatmap */}
         <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d]">
           <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Contribution Heatmap</h2>
           {formData.githubId ? (
@@ -364,7 +369,6 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
           )}
         </div>
 
-        {/* Contribution Split */}
         <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d]">
           <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Contribution Breakdown</h2>
           <div className="h-[200px]">
@@ -400,7 +404,6 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         </div>
       </div>
 
-      {/* Activity Chart */}
       <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d] mb-8">
         <div className="flex justify-between items-center mb-4 border-b border-[#30363d] pb-3">
           <h2 className="text-lg font-semibold text-[#e6edf3]">Activity Over Time</h2>

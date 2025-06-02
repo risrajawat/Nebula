@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import "../globals.css";
 
@@ -27,9 +26,17 @@ const RepoTabs: React.FC<RepoTabsProps> = ({
       ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.1 }
     );
-    if (tabsRef.current) observer.observe(tabsRef.current);
+
+    const currentRef = tabsRef.current; // Copy ref to variable
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
     return () => {
-      if (tabsRef.current) observer.unobserve(tabsRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef); // Use copied variable in cleanup
+      }
     };
   }, []);
 

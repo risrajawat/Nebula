@@ -1,8 +1,6 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import FloatingNavbar from "./components/hero/FloatingNavbar";
 import NebulaHero from "./components/hero/NebulaHero";
 import About from "./components/hero/About";
@@ -13,19 +11,13 @@ import EventsSection from "./components/hero/EventsSection";
 import TeamPage from "./components/hero/TeamPage";
 import LoginFormPopup from "./components/LoginFormPopup";
 import Footer from "./components/hero/Footer";
+import FullPageWrapper from "./components/hero/FullPageWrapper";
 
 function Page() {
   const launchDate = new Date("2025-06-01T06:30:00Z").getTime();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-  const [prevSeconds, setPrevSeconds] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -35,36 +27,17 @@ function Page() {
   }, []);
 
   useEffect(() => {
-    setIsClient(true);
+    const timeout = setTimeout(() => setIsClient(true), 50);
+    return () => clearTimeout(timeout);
+  }, []);
 
-    const calculateTimeRemaining = () => {
-      const now = new Date().getTime();
-      const difference = launchDate - now;
-
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor(
-          (difference % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        setTimeRemaining((current) => {
-          setPrevSeconds(current.seconds);
-          return { days, hours, minutes, seconds };
-        });
-      } else {
-        setTimeRemaining({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        setPrevSeconds(0);
-      }
-    };
-
-    calculateTimeRemaining();
-    const intervalId = setInterval(calculateTimeRemaining, 1000);
-    return () => clearInterval(intervalId);
-  }, [launchDate]);
+  useEffect(() => {
+    if (showLoginPopup) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [showLoginPopup]);
 
   const handleContributeClick = () => {
     if (isLoggedIn) {
@@ -79,31 +52,30 @@ function Page() {
   return (
     <>
       <FloatingNavbar showLoginState={{ setShowLoginPopup }} />
-
-      <main className="w-full">
-        <section className="min-h-screen">
+      <>
+        <div className="section">
           <NebulaHero />
-        </section>
-        <section className="min-h-screen">
+        </div>
+        <div className="section">
           <About />
-        </section>
-        <section className="min-h-screen">
+        </div>
+        <div className="section">
           <GitHubShowcase />
-        </section>
-        <section className="min-h-screen">
+        </div>
+        <div className="section">
           <AutoScrollingTestimonials />
-        </section>
-        <section className="min-h-screen">
+        </div>
+        <div className="section">
           <VisualDiary />
-        </section>
-        <section className="min-h-screen">
+        </div>
+        <div className="section">
           <EventsSection />
-        </section>
-        <section className="min-h-screen">
+        </div>
+        <div className="section">
           <TeamPage />
-        </section>
-        <Footer />
-      </main>
+          <Footer />
+        </div>
+      </>
 
       {showLoginPopup && (
         <LoginFormPopup

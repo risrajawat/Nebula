@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import React from "react";
 import { FaUsers, FaHandshake, FaRocket, FaStar } from "react-icons/fa";
 
@@ -127,7 +127,7 @@ const TeamPage: React.FC = () => {
             key={idx}
             className="relative bg-white/5 rounded-2xl p-6 flex flex-col items-center text-center shadow-xl backdrop-blur-md"
           >
-            <img
+            <Image
               src={member.photo}
               alt={member.name}
               className="w-28 h-28 rounded-full mb-6 border-2 border-white/20 object-cover"

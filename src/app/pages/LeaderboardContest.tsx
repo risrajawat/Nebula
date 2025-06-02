@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 
@@ -76,7 +76,7 @@ const LeaderboardPage = () => {
         <div className="leaderboard-podium">
           <div className="podium-item second">
             <div className="podium-avatar">
-              <img
+              <Image
                 src={leaderboardData[1].avatar}
                 alt={leaderboardData[1].name}
               />
@@ -87,7 +87,7 @@ const LeaderboardPage = () => {
           </div>
           <div className="podium-item first">
             <div className="podium-avatar">
-              <img
+              <Image
                 src={leaderboardData[0].avatar}
                 alt={leaderboardData[0].name}
               />
@@ -98,7 +98,7 @@ const LeaderboardPage = () => {
           </div>
           <div className="podium-item third">
             <div className="podium-avatar">
-              <img
+              <Image
                 src={leaderboardData[2].avatar}
                 alt={leaderboardData[2].name}
               />
@@ -151,7 +151,7 @@ const LeaderboardPage = () => {
                   </td>
                   <td>–</td>
                   <td className="user-cell">
-                    <img
+                    <Image
                       src={user.avatar}
                       alt={user.name}
                       className="user-avatar"

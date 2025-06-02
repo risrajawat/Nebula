@@ -28,13 +28,16 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, []);
 
   useEffect(() => {
+    const element = sidebarRef.current; // Store ref value locally
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.1 }
     );
-    if (sidebarRef.current) observer.observe(sidebarRef.current);
+
+    if (element) observer.observe(element);
+
     return () => {
-      if (sidebarRef.current) observer.unobserve(sidebarRef.current);
+      if (element) observer.unobserve(element);
     };
   }, []);
 

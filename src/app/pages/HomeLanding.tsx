@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -80,12 +80,12 @@ const HomeLanding: React.FC = () => {
 
   return (
     <div
-        className="ml-[5px] w-full px-4 sm:px-6 lg:px-8"
-        style={{ minHeight: "100vh", overflowX: "hidden", marginRight:"5px" }}
-        >  
-        <div style={{ position: "relative" }}>
-            <NebulaHero />
-        </div>
+      className="ml-[5px] w-full px-4 sm:px-6 lg:px-8"
+      style={{ minHeight: "100vh", overflowX: "hidden", marginRight: "5px" }}
+    >
+      <div style={{ position: "relative" }}>
+        <NebulaHero />
+      </div>
 
       {isDesktop && (
         <div
@@ -177,7 +177,7 @@ const HomeLanding: React.FC = () => {
               key={idx}
               className="bg-black/40 border border-gray-700 rounded-xl overflow-hidden shadow-xl backdrop-blur-sm hover:shadow-blue-500/30 transition duration-300"
             >
-              <img
+              <Image
                 src={card.image}
                 alt={card.title}
                 className="w-full h-64 object-cover"
@@ -193,7 +193,6 @@ const HomeLanding: React.FC = () => {
         </div>
       </section>
 
-      
       {/* Timeline section (native layout to be made responsive later) */}
       <div>
         <Timeline />
@@ -237,7 +236,7 @@ const HomeLanding: React.FC = () => {
                 border: "1px solid rgba(255, 255, 255, 0.1)",
               }}
             >
-              <img
+              <Image
                 src={contributor.avatar_url}
                 alt={contributor.login}
                 style={{ width: 48, height: 48, borderRadius: "50%" }}
@@ -293,7 +292,8 @@ const HomeLanding: React.FC = () => {
                   {repo.description}
                 </div>
                 <div style={{ fontSize: "0.8rem", color: "#999" }}>
-                  ⭐ {repo.stargazers_count} &nbsp; | &nbsp; 🍴 {repo.forks_count}
+                  ⭐ {repo.stargazers_count} &nbsp; | &nbsp; 🍴{" "}
+                  {repo.forks_count}
                 </div>
               </a>
             ))}

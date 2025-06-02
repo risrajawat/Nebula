@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface GalleryItem {
   id: number;
@@ -63,7 +64,7 @@ const VisualDiary: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-auto px-1 md:px-0">
           {galleryItemsData.map((item) => (
             <div key={item.id} className="overflow-hidden rounded-lg">
-              <img
+              <Image
                 src={item.src}
                 alt={item.alt}
                 className="w-full h-64 object-cover"

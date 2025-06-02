@@ -19,8 +19,9 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-white">Company</h3>
             <p className="text-sm leading-relaxed">
-              We're dedicated to delivering exceptional experiences and
-              innovative solutions that make a difference in people's lives.
+              We&apos;re dedicated to delivering exceptional experiences and
+              innovative solutions that make a difference in people&apos;s
+              lives.
             </p>
             <div className="flex space-x-4">
               <a

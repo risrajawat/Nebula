@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,7 +19,9 @@ import {
   Line,
 } from "recharts";
 
-const ContributionGraph = dynamic(() => import("react-github-calendar"), { ssr: false });
+const ContributionGraph = dynamic(() => import("react-github-calendar"), {
+  ssr: false,
+});
 
 interface Repo {
   owner: string;
@@ -74,7 +77,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
   const [topLanguages, setTopLanguages] = useState<string[]>([]);
   const [estimatedTime, setEstimatedTime] = useState<string>("");
 
-  const [lineChartType, setLineChartType] = useState<"commits" | "issues" | "prs">("commits");
+  const [lineChartType, setLineChartType] = useState<
+    "commits" | "issues" | "prs"
+  >("commits");
   const [lineChartData, setLineChartData] = useState({
     commits: [] as { date: string; count: number }[],
     issues: [] as { date: string; count: number }[],
@@ -139,7 +144,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         const [eventsRes, repoRes, contributorsRes] = await Promise.all([
           fetch(`https://api.github.com/repos/SASTxNST/Website_SAST/events`),
           fetch("https://api.github.com/repos/SASTxNST/Website_SAST"),
-          fetch("https://api.github.com/repos/SASTxNST/Website_SAST/contributors"),
+          fetch(
+            "https://api.github.com/repos/SASTxNST/Website_SAST/contributors"
+          ),
         ]);
 
         const events = await eventsRes.json();
@@ -170,20 +177,31 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
                 });
                 commitMap[dateStr] = (commitMap[dateStr] || 0) + 1;
               });
-            } else if (event.type === "PullRequestEvent" && event.payload.pull_request?.merged) {
+            } else if (
+              event.type === "PullRequestEvent" &&
+              event.payload.pull_request?.merged
+            ) {
               merges.push({
                 repoName: event.repo.name,
                 title: event.payload.pull_request.title,
-                date: new Date(event.payload.pull_request.merged_at).toLocaleString(),
+                date: new Date(
+                  event.payload.pull_request.merged_at
+                ).toLocaleString(),
                 url: event.payload.pull_request.html_url,
               });
             }
 
-            if (event.type === "IssuesEvent" && event.payload.action === "opened") {
+            if (
+              event.type === "IssuesEvent" &&
+              event.payload.action === "opened"
+            ) {
               issueMap[dateStr] = (issueMap[dateStr] || 0) + 1;
             }
 
-            if (event.type === "PullRequestEvent" && event.payload.action === "opened") {
+            if (
+              event.type === "PullRequestEvent" &&
+              event.payload.action === "opened"
+            ) {
               prMap[dateStr] = (prMap[dateStr] || 0) + 1;
             }
           });
@@ -198,7 +216,8 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         const next = new Date(now + 5 * 60 * 1000);
         setNextFetchTime(next.toLocaleTimeString());
 
-        const rank = contributors.findIndex((c: any) => c.login === formData.githubId) + 1;
+        const rank =
+          contributors.findIndex((c: any) => c.login === formData.githubId) + 1;
         setContributorRank(rank > 0 ? rank : null);
 
         const formatMap = (map: Record<string, number>) =>
@@ -211,7 +230,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         });
       } catch (err) {
         console.error("Unexpected GitHub fetch error:", err);
-        toast.error("GitHub API failed. Possibly rate-limited or user not found.");
+        toast.error(
+          "GitHub API failed. Possibly rate-limited or user not found."
+        );
       }
     };
 
@@ -228,7 +249,10 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
     acc[date] = (acc[date] || 0) + 1;
     return acc;
   }, {});
-  const formattedChartData = Object.entries(barData).map(([date, count]) => ({ date, count }));
+  const formattedChartData = Object.entries(barData).map(([date, count]) => ({
+    date,
+    count,
+  }));
 
   const pieData = [
     { name: "Commits", value: commitDetails.length },
@@ -242,19 +266,36 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
 
       <div className="flex justify-between items-center gap-4 mb-4">
         <div>
-          <h1 className="text-2xl font-semibold">Welcome, {formData.username}</h1>
-          <p className="text-sm text-gray-400">Next update at: {nextFetchTime}</p>
+          <h1 className="text-2xl font-semibold">
+            Welcome, {formData.username}
+          </h1>
+          <p className="text-sm text-gray-400">
+            Next update at: {nextFetchTime}
+          </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
-          <div className="text-sm bg-[#2a2f4a] px-3 py-1 rounded-full">⭐ Stars: {stars}</div>
-          <div className="text-sm bg-[#2a2f4a] px-3 py-1 rounded-full">🍴 Forks: {forks}</div>
-          <button onClick={handleLogout} className="ml-4 text-sm px-3 py-1 rounded bg-red-600 hover:bg-red-700">Logout</button>
+          <div className="text-sm bg-[#2a2f4a] px-3 py-1 rounded-full">
+            ⭐ Stars: {stars}
+          </div>
+          <div className="text-sm bg-[#2a2f4a] px-3 py-1 rounded-full">
+            🍴 Forks: {forks}
+          </div>
+          <button
+            onClick={handleLogout}
+            className="ml-4 text-sm px-3 py-1 rounded bg-red-600 hover:bg-red-700"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
-      <TopStatsBlock topLanguages={topLanguages} estimatedTime={estimatedTime} contributorRank={contributorRank} nextFetchTime={nextFetchTime} />
-
+      <TopStatsBlock
+        topLanguages={topLanguages}
+        estimatedTime={estimatedTime}
+        contributorRank={contributorRank}
+        nextFetchTime={nextFetchTime}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
@@ -262,7 +303,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
             <span className="text-sm text-gray-300">Username</span>
             <input
               value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
               className="w-full mt-1 px-3 py-2 rounded bg-[#1E1E3F] border border-gray-600"
               placeholder="Enter your name"
             />
@@ -271,7 +314,9 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
             <span className="text-sm text-gray-300">GitHub Username</span>
             <input
               value={formData.githubId}
-              onChange={(e) => setFormData({ ...formData, githubId: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, githubId: e.target.value })
+              }
               className="w-full mt-1 px-3 py-2 rounded bg-[#1E1E3F] border border-gray-600"
               placeholder="GitHub handle"
             />
@@ -285,9 +330,11 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         </div>
 
         <div className="bg-[#1E1E3F] p-4 rounded-xl flex flex-col items-center justify-center">
-          <p className="text-sm mb-2 text-gray-300">Profile Picture (from GitHub)</p>
+          <p className="text-sm mb-2 text-gray-300">
+            Profile Picture (from GitHub)
+          </p>
           {formData.profilePic && (
-            <img
+            <Image
               src={formData.profilePic}
               alt="Profile Preview"
               className="w-32 h-32 rounded-full object-cover border-4 border-[#4fc3f7]"
@@ -304,7 +351,10 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
               View Public Card
             </a>
             <p className="text-xs mt-1 text-gray-400">
-              Rank: <span className="text-white font-semibold">#{contributorRank ?? '—'}</span>
+              Rank:{" "}
+              <span className="text-white font-semibold">
+                #{contributorRank ?? "—"}
+              </span>
             </p>
           </div>
         </div>
@@ -312,9 +362,14 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
 
       <div className="grid md:grid-cols-2 gap-6 mt-10">
         <div className="bg-[#3b2a530f] p-4 rounded-xl">
-          <p className="text-md font-bold text-[#9DA4F2] mb-2">Contribution Heatmap</p>
+          <p className="text-md font-bold text-[#9DA4F2] mb-2">
+            Contribution Heatmap
+          </p>
           {formData.githubId && (
-            <ContributionGraph username={formData.githubId} colorScheme="dark" />
+            <ContributionGraph
+              username={formData.githubId}
+              colorScheme="dark"
+            />
           )}
         </div>
 
@@ -331,12 +386,25 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
         </div> */}
 
         <div className="bg-[#3b2a530f] p-4 rounded-xl">
-          <p className="text-md font-bold text-[#9DA4F2] mb-2">Contribution Type Split</p>
+          <p className="text-md font-bold text-[#9DA4F2] mb-2">
+            Contribution Type Split
+          </p>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} label>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={60}
+                label
+              >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={pieColors[index % pieColors.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -346,12 +414,16 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
 
         <div className="bg-[#3b2a530f] p-4 rounded-xl col-span-full">
           <div className="flex justify-between items-center mb-3">
-            <p className="text-md font-bold text-[#9DA4F2]">Contribution Over Time</p>
+            <p className="text-md font-bold text-[#9DA4F2]">
+              Contribution Over Time
+            </p>
             <div className="space-x-2">
               {["commits", "issues", "prs"].map((type) => (
                 <button
                   key={type}
-                  onClick={() => setLineChartType(type as "commits" | "issues" | "prs")}
+                  onClick={() =>
+                    setLineChartType(type as "commits" | "issues" | "prs")
+                  }
                   className={`px-3 py-1 rounded-full text-xs ${
                     lineChartType === type
                       ? "bg-[#4fc3f7] text-black"
@@ -368,13 +440,17 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
               <XAxis dataKey="date" />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Line type="monotone" dataKey="count" stroke="#4fc3f7" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="count"
+                stroke="#4fc3f7"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
     </div>
-    
   );
 };
 

@@ -1,7 +1,7 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
+import Image from "next/image";
 
 // Define a type for contributors
 interface Contributor {
@@ -138,7 +138,7 @@ function LeaderboardContest() {
               {podium[1] && (
                 <div className="podium-item second">
                   <div className="podium-avatar">
-                    <img src={podium[1].avatar} alt={podium[1].login} />
+                    <Image src={podium[1].avatar} alt={podium[1].login} />
                     <span className="podium-rank">2</span>
                   </div>
                   <div className="podium-name">{podium[1].login}</div>
@@ -148,7 +148,7 @@ function LeaderboardContest() {
               {podium[0] && (
                 <div className="podium-item first">
                   <div className="podium-avatar">
-                    <img src={podium[0].avatar} alt={podium[0].login} />
+                    <Image src={podium[0].avatar} alt={podium[0].login} />
                     <span className="podium-rank">1</span>
                   </div>
                   <div className="podium-name">{podium[0].login}</div>
@@ -158,7 +158,7 @@ function LeaderboardContest() {
               {podium[2] && (
                 <div className="podium-item third">
                   <div className="podium-avatar">
-                    <img src={podium[2].avatar} alt={podium[2].login} />
+                    <Image src={podium[2].avatar} alt={podium[2].login} />
                     <span className="podium-rank">3</span>
                   </div>
                   <div className="podium-name">{podium[2].login}</div>
@@ -193,7 +193,7 @@ function LeaderboardContest() {
                         </span>
                       </td>
                       <td className="user-cell">
-                        <img
+                        <Image
                           src={user.avatar}
                           alt={user.login}
                           className="user-avatar"

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
 import { SiOpenproject } from "react-icons/si";
 import { BsRocketTakeoff } from "react-icons/bs";
@@ -38,7 +39,7 @@ const GitHubShowcase = () => {
 
               <div>
                 <div className="flex items-center gap-4 mb-5 relative z-10">
-                  <img
+                  <Image
                     src={repo.logo}
                     alt={repo.name}
                     className="w-14 h-14 object-contain rounded-lg bg-white/10 p-1"

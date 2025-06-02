@@ -1,12 +1,16 @@
+import Image from "next/image";
+
 const About = () => {
   return (
     <div className="relative w-full min-h-screen bg-black text-white font-sans overflow-hidden flex flex-col">
       <div className="absolute inset-0">
         <div className="w-full h-full bg-gradient-to-l from-black via-black/60 to-transparent absolute z-0" />
-        <img
-          src="https://lh3.googleusercontent.com/9zE3StG50FuHs9PCo6kMTIhWKyIc3vJ2JqxPZEgaKc8WQ2vzAyWR4wqYYhMZ7zkhc0C893COYflGKt70Sb15e4gg7eI=s1600-w1600-h1000"
+        <Image
+          src="https://i.postimg.cc/pd3vC12b/unnamed.png"
           alt="Hero"
           className="object-cover w-full h-full opacity-15"
+          fill
+          priority
         />
       </div>
       <div className="fp-scrollable-content max-h-full overflow-y-auto px-10 py-20 text-white"></div>

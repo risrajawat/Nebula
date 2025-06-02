@@ -71,7 +71,7 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
   const [lastFetched, setLastFetched] = useState<number | null>(null);
   const [nextFetchTime, setNextFetchTime] = useState<string>("");
   const [contributorRank, setContributorRank] = useState<number | null>(null);
-  const [topLanguages, setTopLanguages] = useState<string[]>([]);
+  const [topLanguages, setTopLanguages] = useState<string[]>(["English"]);
   const [estimatedTime, setEstimatedTime] = useState<string>("");
 
   const [lineChartType, setLineChartType] = useState<"commits" | "issues" | "prs">("commits");
@@ -84,14 +84,7 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
   useEffect(() => {
     const email = localStorage.getItem("email");
     if (!email) return;
-
-    const savedProfile = localStorage.getItem("savedProfile");
-    if (savedProfile) {
-      const parsed = JSON.parse(savedProfile);
-      setFormData(parsed);
-      setUser((prev) => ({ ...(prev as UserData), ...parsed }));
-    }
-
+  
     fetch("/api/getuser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -100,7 +93,16 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
       .then((res) => res.json())
       .then((data) => {
         setUser(data);
-        setFormData((prev) => ({ ...data, ...prev }));
+        setFormData({
+          username: data.username || "",
+          githubId: data.githubId || "",
+          profilePic: data.githubId
+            ? `https://github.com/${data.githubId}.png`
+            : "",
+        });
+      })
+      .catch((err) => {
+        console.error("Error fetching user data:", err);
       });
   }, []);
 
@@ -234,147 +236,225 @@ const Profile: React.FC<ProfileProps> = ({ repositories }) => {
     { name: "Commits", value: commitDetails.length },
     { name: "PR Merges", value: mergeDetails.length },
   ];
-  const pieColors = ["#4fc3f7", "#8884d8"];
+  const pieColors = ["#56d364", "#1f6feb"]; // GitHub green and blue
 
   return (
-    <div className="min-h-screen p-6 text-white font-orbitron">
-      <Toaster />
+    <div className="min-h-screen bg-[#0d1117] p-6 text-[#c9d1d9] font-sans">
+      <Toaster 
+        toastOptions={{
+          style: {
+            background: '#161b22',
+            color: '#c9d1d9',
+            border: '1px solid #30363d'
+          }
+        }}
+      />
 
-      <div className="flex justify-between items-center gap-4 mb-4">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-[#30363d] pb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Welcome, {formData.username}</h1>
-          <p className="text-sm text-gray-400">Next update at: {nextFetchTime}</p>
+          <h1 className="text-2xl font-semibold text-[#e6edf3]">Welcome, {formData.username || 'Developer'}</h1>
+          {/* <p className="text-sm text-[#7d8590]">Next data refresh: {nextFetchTime || 'soon'}</p> */}
         </div>
         
-        <div className="flex items-center gap-2">
-          <div className="text-sm bg-[#2a2f4a] px-3 py-1 rounded-full">⭐ Stars: {stars}</div>
-          <div className="text-sm bg-[#2a2f4a] px-3 py-1 rounded-full">🍴 Forks: {forks}</div>
-          <button onClick={handleLogout} className="ml-4 text-sm px-3 py-1 rounded bg-red-600 hover:bg-red-700">Logout</button>
-        </div>
-      </div>
-
-      <TopStatsBlock topLanguages={topLanguages} estimatedTime={estimatedTime} contributorRank={contributorRank} nextFetchTime={nextFetchTime} />
-
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <label className="block">
-            <span className="text-sm text-gray-300">Username</span>
-            <input
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="w-full mt-1 px-3 py-2 rounded bg-[#1E1E3F] border border-gray-600"
-              placeholder="Enter your name"
-            />
-          </label>
-          <label className="block">
-            <span className="text-sm text-gray-300">GitHub Username</span>
-            <input
-              value={formData.githubId}
-              onChange={(e) => setFormData({ ...formData, githubId: e.target.value })}
-              className="w-full mt-1 px-3 py-2 rounded bg-[#1E1E3F] border border-gray-600"
-              placeholder="GitHub handle"
-            />
-          </label>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 mt-2 rounded bg-green-600 hover:bg-green-700 text-sm"
+        <div className="flex items-center gap-3">
+          <div className="flex items-center text-sm bg-[#161b22] px-3 py-1.5 rounded-md border border-[#30363d]">
+            <span className="text-[#7d8590] mr-1">⭐</span>
+            <span className="font-medium">{stars}</span>
+          </div>
+          <div className="flex items-center text-sm bg-[#161b22] px-3 py-1.5 rounded-md border border-[#30363d]">
+            <span className="text-[#7d8590] mr-1">🍴</span>
+            <span className="font-medium">{forks}</span>
+          </div>
+          <button 
+            onClick={handleLogout} 
+            className="ml-2 text-sm px-3 py-1.5 rounded-md bg-[#21262d] hover:bg-[#30363d] border border-[#363b42] text-[#f85149] hover:text-white transition-colors"
           >
-            Save Changes
+            Sign out
           </button>
         </div>
+      </div>
 
-        <div className="bg-[#1E1E3F] p-4 rounded-xl flex flex-col items-center justify-center">
-          <p className="text-sm mb-2 text-gray-300">Profile Picture (from GitHub)</p>
-          {formData.profilePic && (
-            <img
-              src={formData.profilePic}
-              alt="Profile Preview"
-              className="w-32 h-32 rounded-full object-cover border-4 border-[#4fc3f7]"
-            />
-          )}
-          <div className="mt-3 text-center">
-            <p className="text-xs text-gray-400">Public Profile:</p>
-            <a
-              href={`/public/${formData.githubId}`}
-              className="text-sm text-blue-400 underline"
-              target="_blank"
-              rel="noopener noreferrer"
+      <TopStatsBlock 
+        topLanguages={topLanguages} 
+        estimatedTime={estimatedTime} 
+        contributorRank={contributorRank} 
+        nextFetchTime={nextFetchTime} 
+      />
+
+      {/* Profile Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Profile Form */}
+        <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d]">
+          <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Profile Settings</h2>
+          <div className="space-y-4">
+            <label className="block">
+              <span className="text-sm text-[#7d8590] block mb-1">Display name</span>
+              <input
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full px-3 py-2 rounded bg-[#0d1117] border border-[#30363d] text-[#c9d1d9] focus:border-[#1f6feb] focus:ring-1 focus:ring-[#1f6feb] outline-none transition"
+                placeholder="Your name"
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm text-[#7d8590] block mb-1">GitHub username</span>
+              <input
+                value={formData.githubId}
+                onChange={(e) => setFormData({ ...formData, githubId: e.target.value })}
+                className="w-full px-3 py-2 rounded bg-[#0d1117] border border-[#30363d] text-[#c9d1d9] focus:border-[#1f6feb] focus:ring-1 focus:ring-[#1f6feb] outline-none transition"
+                placeholder="GitHub username"
+              />
+            </label>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 mt-2 rounded-md bg-[#238636] hover:bg-[#2ea043] text-white font-medium text-sm transition-colors"
             >
-              View Public Card
-            </a>
-            <p className="text-xs mt-1 text-gray-400">
-              Rank: <span className="text-white font-semibold">#{contributorRank ?? '—'}</span>
-            </p>
+              Save changes
+            </button>
+          </div>
+        </div>
+
+        {/* Profile Card */}
+        <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d] flex flex-col">
+          <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Profile Preview</h2>
+          <div className="flex flex-col items-center justify-center flex-grow">
+            {formData.profilePic ? (
+              <img
+                src={formData.profilePic}
+                alt="Profile Preview"
+                className="w-32 h-32 rounded-full object-cover border-4 border-[#30363d] mb-4"
+              />
+            ) : (
+              <div className="w-32 h-32 rounded-full bg-[#0d1117] border-4 border-[#30363d] mb-4 flex items-center justify-center text-[#7d8590]">
+                No Image
+              </div>
+            )}
+            <div className="text-center">
+              <p className="text-sm text-[#7d8590]">GitHub Contributions Rank</p>
+              <div className="mt-1 bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-1 inline-block">
+                <span className="font-semibold text-[#e6edf3]">
+                  {contributorRank ? `#${contributorRank}` : 'Not ranked'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mt-10">
-        <div className="bg-[#3b2a530f] p-4 rounded-xl">
-          <p className="text-md font-bold text-[#9DA4F2] mb-2">Contribution Heatmap</p>
-          {formData.githubId && (
-            <ContributionGraph username={formData.githubId} colorScheme="dark" />
+      {/* Data Visualization Section */}
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        {/* Contribution Heatmap */}
+        <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d]">
+          <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Contribution Heatmap</h2>
+          {formData.githubId ? (
+            <div className="p-2">
+              <ContributionGraph 
+                username={formData.githubId} 
+                colorScheme="dark"
+                blockSize={12}
+                blockMargin={4}
+                fontSize={10}
+              />
+            </div>
+          ) : (
+            <div className="text-center py-8 text-[#7d8590]">
+              Enter GitHub username to see contributions
+            </div>
           )}
         </div>
 
-        {/* <div className="bg-[#3b2a530f] p-4 rounded-xl">
-          <p className="text-md font-bold text-[#9DA4F2] mb-2">Commits Per Day</p>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={formattedChartData}>
-              <XAxis dataKey="date" hide tick={false} />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#4fc3f7" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div> */}
-
-        <div className="bg-[#3b2a530f] p-4 rounded-xl">
-          <p className="text-md font-bold text-[#9DA4F2] mb-2">Contribution Type Split</p>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} label>
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-[#3b2a530f] p-4 rounded-xl col-span-full">
-          <div className="flex justify-between items-center mb-3">
-            <p className="text-md font-bold text-[#9DA4F2]">Contribution Over Time</p>
-            <div className="space-x-2">
-              {["commits", "issues", "prs"].map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setLineChartType(type as "commits" | "issues" | "prs")}
-                  className={`px-3 py-1 rounded-full text-xs ${
-                    lineChartType === type
-                      ? "bg-[#4fc3f7] text-black"
-                      : "bg-[#2a2f4a] text-white"
-                  }`}
+        {/* Contribution Split */}
+        <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d]">
+          <h2 className="text-lg font-semibold mb-4 text-[#e6edf3] border-b border-[#30363d] pb-3">Contribution Breakdown</h2>
+          <div className="h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie 
+                  data={pieData} 
+                  dataKey="value" 
+                  nameKey="name" 
+                  cx="50%" 
+                  cy="50%" 
+                  outerRadius={60} 
+                  innerRadius={30}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  labelLine={false}
                 >
-                  {type.toUpperCase()}
-                </button>
-              ))}
-            </div>
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{
+                    background: '#161b22',
+                    borderColor: '#30363d',
+                    borderRadius: '6px',
+                    color: '#e6edf3'
+                  }}
+                  itemStyle={{ color: '#e6edf3' }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
-          <ResponsiveContainer width="100%" height={250}>
+        </div>
+      </div>
+
+      {/* Activity Chart */}
+      <div className="bg-[#161b22] p-5 rounded-lg border border-[#30363d] mb-8">
+        <div className="flex justify-between items-center mb-4 border-b border-[#30363d] pb-3">
+          <h2 className="text-lg font-semibold text-[#e6edf3]">Activity Over Time</h2>
+          <div className="flex space-x-1 bg-[#0d1117] rounded-md p-1 border border-[#30363d]">
+            {["commits", "issues", "prs"].map((type) => (
+              <button
+                key={type}
+                onClick={() => setLineChartType(type as "commits" | "issues" | "prs")}
+                className={`px-3 py-1 rounded-md text-xs ${
+                  lineChartType === type
+                    ? "bg-[#1f6feb] text-white"
+                    : "text-[#7d8590] hover:bg-[#21262d]"
+                } transition-colors`}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
             <LineChart data={lineChartData[lineChartType]}>
-              <XAxis dataKey="date" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Line type="monotone" dataKey="count" stroke="#4fc3f7" strokeWidth={2} />
+              <XAxis 
+                dataKey="date" 
+                stroke="#7d8590"
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis 
+                allowDecimals={false} 
+                stroke="#7d8590"
+                tick={{ fontSize: 12 }}
+              />
+              <Tooltip 
+                contentStyle={{
+                  background: '#161b22',
+                  borderColor: '#30363d',
+                  borderRadius: '6px',
+                  color: '#e6edf3'
+                }}
+                itemStyle={{ color: '#e6edf3' }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="count" 
+                stroke="#1f6feb" 
+                strokeWidth={2} 
+                dot={{ fill: '#1f6feb', r: 3 }}
+                activeDot={{ fill: '#56d364', r: 5 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
     </div>
-    
   );
 };
 

@@ -51,18 +51,18 @@ const galleryItemsData: GalleryItem[] = [
 
 const VisualDiary: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#000000] text-white px-4 py-10">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold mb-2">Gallery</h1>
-          <p className="text-gray-400">
+    <div className="h-screen bg-black text-white px-4 pt-[72px] pb-6 flex flex-col">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-1">Gallery</h1>
+          <p className="text-gray-400 text-sm md:text-base">
             A collection of moments frozen in time
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-auto px-1 md:px-0">
           {galleryItemsData.map((item) => (
-            <div key={item.id} className="overflow-hidden rounded-md">
+            <div key={item.id} className="overflow-hidden rounded-lg">
               <img
                 src={item.src}
                 alt={item.alt}

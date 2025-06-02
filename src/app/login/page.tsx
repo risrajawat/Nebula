@@ -125,7 +125,6 @@ const Page = () => {
           </button>
         </div>
 
-        {/* Right panel: Login / Signup Form - Updated for better contrast */}
         <div className="flex flex-col items-center justify-center p-8 md:p-12 md:w-1/2 bg-white/5 backdrop-blur-2xl rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none">
           <h3 className="mb-8 text-3xl font-bold text-white">
             {isLogin ? "Login" : "Signup"}
@@ -227,7 +226,7 @@ const Page = () => {
           </form>
         </div>
       </div>
-      {/* Custom CSS for blob animation */}
+
       <style jsx>{`
         @keyframes blob {
           0% {

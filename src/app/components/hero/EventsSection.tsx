@@ -23,7 +23,6 @@ const EventsSection: React.FC = () => {
         "Design, build, and fly your own remote-controlled aircraft. Compete in real-world flight challenges that test your engineering and aerodynamics skills.",
     },
   ];
-  
 
   return (
     <div className="relative min-h-screen w-full bg-black flex flex-col items-center justify-center py-20 px-6 overflow-hidden">
@@ -47,10 +46,7 @@ const EventsSection: React.FC = () => {
         size={130}
       />
 
-      <h2
-        className="text-5xl md:text-5xl font-bold text-white mb-16 z-10 text-center tracking-wide"
-        style={{ fontFamily: '"Nebula Hollow", sans-serif' }}
-      >
+      <h2 className="text-5xl md:text-5xl font-bold text-white mb-16 z-10 text-center tracking-wide">
         Upcoming Events
       </h2>
 

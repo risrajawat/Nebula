@@ -483,5 +483,4 @@ const LeaderboardPage = () => {
 
 export default LeaderboardPage;
 
-// Add this at the bottom to register the page route for Next.js App Router
 export const dynamic = "force-static";

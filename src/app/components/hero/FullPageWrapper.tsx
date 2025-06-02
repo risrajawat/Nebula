@@ -1,38 +1,47 @@
 "use client";
+import React, { useEffect, useRef } from "react";
 
-import { useEffect } from "react";
-import "fullpage.js/dist/fullpage.css";
+let fullpageInstance: any = null;
 
-interface FullPageWrapperProps {
-  children: React.ReactNode;
-}
+const FullPageWrapper: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-const FullPageWrapper: React.FC<FullPageWrapperProps> = ({ children }) => {
   useEffect(() => {
-    let fullpageInstance: any;
+    async function initFullpage() {
+      if (!containerRef.current) return;
 
-    // Only run if window is available (i.e., client-side)
-    if (typeof window !== "undefined") {
-      (async () => {
-        const fullpage = (await import("fullpage.js")).default;
+      if (fullpageInstance) {
+        // Destroy previous instance before creating a new one
+        fullpageInstance.destroy("all");
+        fullpageInstance = null;
+      }
 
-        fullpageInstance = new fullpage("#fullpage", {
-          autoScrolling: true,
-          navigation: true,
-          scrollHorizontally: true,
-          licenseKey: "gplv3-license",
-        });
-      })();
+      const fullpage = (await import("fullpage.js")).default;
+
+      fullpageInstance = new fullpage(containerRef.current, {
+        autoScrolling: true,
+        navigation: true,
+        scrollHorizontally: true,
+        // your other options
+      });
     }
 
+    initFullpage();
+
+    // Cleanup on unmount
     return () => {
-      if (fullpageInstance && fullpageInstance.destroy) {
+      if (fullpageInstance) {
         fullpageInstance.destroy("all");
+        fullpageInstance = null;
       }
     };
   }, []);
 
-  return <div id="fullpage">{children}</div>;
+  return (
+    <div id="fullpage" ref={containerRef}>
+      {/* Your fullpage sections */}
+    </div>
+  );
 };
 
 export default FullPageWrapper;

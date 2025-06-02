@@ -130,8 +130,8 @@ const TeamPage: React.FC = () => {
             <Image
               src={member.photo}
               alt={member.name}
-              width={112}
-              height={112}
+              width={112} // <-- width set
+              height={112} // <-- height set
               className="rounded-full mb-6 border-2 border-white/20 object-cover"
             />
 

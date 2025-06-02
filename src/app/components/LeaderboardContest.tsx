@@ -11,6 +11,13 @@ interface Contributor {
   html_url: string;
 }
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * A page that displays the leaderboard of contributors to the SAST GitHub repo.
+ * It fetches the list of contributors from the GitHub API and displays them
+ * in a table, with the top 3 contributors highlighted.
+ */
+/*******  00541f80-7d0a-407d-aa04-9cfdd914b5b2  *******/
 function LeaderboardContest() {
   const [mounted, setMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -138,7 +145,13 @@ function LeaderboardContest() {
               {podium[1] && (
                 <div className="podium-item second">
                   <div className="podium-avatar">
-                    <Image src={podium[1].avatar} alt={podium[1].login} />
+                    <Image
+                      src={podium[1].avatar}
+                      alt={podium[1].login}
+                      width={80}
+                      height={80}
+                      className="user-avatar rounded-full"
+                    />
                     <span className="podium-rank">2</span>
                   </div>
                   <div className="podium-name">{podium[1].login}</div>
@@ -148,7 +161,13 @@ function LeaderboardContest() {
               {podium[0] && (
                 <div className="podium-item first">
                   <div className="podium-avatar">
-                    <Image src={podium[0].avatar} alt={podium[0].login} />
+                    <Image
+                      src={podium[0].avatar}
+                      alt={podium[0].login}
+                      width={80}
+                      height={80}
+                      className="user-avatar rounded-full"
+                    />
                     <span className="podium-rank">1</span>
                   </div>
                   <div className="podium-name">{podium[0].login}</div>
@@ -158,7 +177,13 @@ function LeaderboardContest() {
               {podium[2] && (
                 <div className="podium-item third">
                   <div className="podium-avatar">
-                    <Image src={podium[2].avatar} alt={podium[2].login} />
+                    <Image
+                      src={podium[2].avatar}
+                      alt={podium[2].login}
+                      width={80}
+                      height={80}
+                      className="user-avatar rounded-full"
+                    />
                     <span className="podium-rank">3</span>
                   </div>
                   <div className="podium-name">{podium[2].login}</div>
@@ -196,7 +221,9 @@ function LeaderboardContest() {
                         <Image
                           src={user.avatar}
                           alt={user.login}
-                          className="user-avatar"
+                          width={40}
+                          height={40}
+                          className="user-avatar rounded-full"
                         />
                         <span className="user-name">{user.login}</span>
                       </td>

@@ -13,7 +13,7 @@ type FloatingNavbarProps = {
 
 const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ showLoginState }) => {
   const [hovered, setHovered] = useState<string | null>("Login");
-  const [hoverStyle, setHoverStyle] = useState({ left: 0, width: 0 });
+  const [hoverStyle, setHoverStyle] = useState({ left: 0, width: 0, height: 42 });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -34,6 +34,7 @@ const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ showLoginState }) => {
       setHoverStyle({
         left: itemLeft - containerLeft,
         width,
+        height: 42,
       });
     }
   }, [hovered]);
@@ -90,6 +91,7 @@ const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ showLoginState }) => {
             animate={{
               left: hoverStyle.left,
               width: hoverStyle.width,
+              height: hoverStyle.height,
             }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
           />
@@ -110,7 +112,7 @@ const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ showLoginState }) => {
                 handleNavigation(item);
               }
             }}
-            className={`relative z-10 px-4 py-2 text-sm cursor-pointer ${
+            className={`relative z-10 px-4 py-2 text-sm cursor-pointer whitespace-nowrap ${
               item === "Contribute"
                 ? "text-pink-400 font-semibold"
                 : item === "Profile" 
